@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ollama
-          image: 471112887059.dkr.ecr.eu-west-1.amazonaws.com/ollama-instruct-model:latest
+          image: <PRIVATE_REGISTRY>/ollama-instruct-model:latest
           ports:
             - containerPort: 11434
           readinessProbe:
@@ -26,7 +26,7 @@ spec:
             periodSeconds: 5
 
         - name: api-instruct
-          image: 471112887059.dkr.ecr.eu-west-1.amazonaws.com/api-instruct:latest
+          image: <PRIVATE_REGISTRY>/api-instruct:latest
           ports:
             - containerPort: 8000
           env:
@@ -35,4 +35,4 @@ spec:
             - name: ENABLE_INSTRUCT
               value: "true"
             - name: API_KEY
-              value: dev-secret-key
+              value: <REDACTED>
