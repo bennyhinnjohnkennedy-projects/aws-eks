@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-stack
+  namespace: llm-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-stack
+  template:
+    metadata:
+      labels:
+        app: llm-stack
+    spec:
+      containers:
+        - name: ollama
+          image: 471112887059.dkr.ecr.eu-west-1.amazonaws.com/ollama-instruct-model:latest
+          ports:
+            - containerPort: 11434
+          readinessProbe:
+            httpGet:
+              path: /api/version
+              port: 11434
+            initialDelaySeconds: 30
+            periodSeconds: 5
+
+        - name: api-instruct
+          image: 471112887059.dkr.ecr.eu-west-1.amazonaws.com/api-instruct:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OLLAMA_URL
+              value: http://localhost:11434
+            - name: ENABLE_INSTRUCT
+              value: "true"
+            - name: API_KEY
+              value: dev-secret-key
